@@ -6,5 +6,5 @@ language detector
 
 
 ### Efficiency
- Text : 99%
+ Text : 90%
  Word : 1/n
