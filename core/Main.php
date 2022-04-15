@@ -1,6 +1,8 @@
 <?php
 namespace Core;
 
+use Core\LangDetector;
+
 class Main
 {
     private $wordset;
@@ -24,6 +26,8 @@ class Main
         $norwegian = $this->openDictFile("norsk.txt");
         $finnish = $this->openDictFile("suomi.txt");
 
+
+
         $langDetector = new LangDetector(
             $english,
             $french,
@@ -37,18 +41,17 @@ class Main
             $norwegian,
             $finnish
         );
+        
 
-        return $langDetector->getLang($this->wordset);
+        die (json_encode($langDetector->getLang($this->wordset)));
         
     }
 
 
     public function openDictFile($filename){
-        $fp = @fopen("../resources/dict/".$filename, 'r'); 
-        $array = array();
-        if ($fp) {
-        $array = explode("\n", fread($fp, filesize($filename)));
-        }
+
+        $array = explode("\n", file_get_contents("./resources/dict/".$filename));
+      
         return $array;
         
     }

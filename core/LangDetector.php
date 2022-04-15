@@ -3,20 +3,20 @@ namespace Core;
 
 
 class LangDetector {
-    private $english;
-    private $french;
-    private $german;
-    private $spanish;
-    private $italian;
-    private $dannish; //dansk
-    private $latine;
-    private $hungarian; //magyar
-    private $nederlands;
-    private $norwegian; //norsk
-    private $finnish; //suomi
+    private array $english;
+    private array $french;
+    private array  $german;
+    private array $spanish;
+    private array $italian;
+    private array $dannish; //dansk
+    private array $latine;
+    private array $hungarian; //magyar
+    private array $nederlands;
+    private array $norwegian; //norsk
+    private array $finnish; //suomi
 
 
-    public function detectLang(
+    public function __construct(
         $english,
         $french,
         $german,
@@ -42,10 +42,12 @@ class LangDetector {
         $this->norwegian = $norwegian;
         $this->finnish = $finnish;
 
+      
+
     }
 
     public function getLang($wordset){
-        $wordset = trim($wordset);
+        $wordset = trim(strtolower($wordset));
         
         $wordset = str_replace(["¿", "¡"], "", $wordset);
         if(str_word_count($wordset) == 1){
@@ -53,11 +55,13 @@ class LangDetector {
         }else{
             $wordLang = $this->detectSentenceLang($wordset);
         }
+       
         return $wordLang;
     }
 
     private function detectWordLang( $wordset){
-
+       
+       
         if(in_array($wordset, $this->english)){
             return "English";
         }
@@ -112,6 +116,7 @@ class LangDetector {
 
         foreach($text as $word){
             $word = trim($word);
+            
             if(in_array($word, $this->english)){
                 $english++;
             }
@@ -146,11 +151,24 @@ class LangDetector {
                 $finnish++;
             }
         }
-
-        $max = compact($english, $french, $german, $spanish, $italian, $dannish, $latine, $hungarian, $nederlands, $norwegian, $finnish);
-        arsort($max);
-        if(current($max)>0){
-            return key($max);
+        $langs = [
+            "English" => $english,
+            "French" => $french,
+            "German" => $german,
+            "Spanish" => $spanish,
+            "Italian" => $italian,
+            "Danish" => $dannish,
+            "Latin" => $latine,
+            "Hungarian" => $hungarian,
+            "Nederlands" => $nederlands,
+            "Norwegian" => $norwegian,
+            "Finnish" => $finnish,
+            "Unknown" => $unknown
+        ];
+        $value = max($langs);
+        $key = array_search($value, $langs);
+        if(($value)>0){
+            return $key;
         }else{
             return "Unknown";
         }
